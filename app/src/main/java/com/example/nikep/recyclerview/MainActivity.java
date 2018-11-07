@@ -39,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         mName.add("Kuro neko");
         mVideoUrl.add("99-Hzo5n2Mk");
 
+        mImageUrl.add("http://www.wallpapermaiden.com/image/2018/02/02/darling-in-the-franxx-zero-two-long-pink-hair-anime-19728.jpg");
+        mName.add("Zero two");
+        mVideoUrl.add("2oQffkFWK2Y");
+
         initRecycleView();
     }
 
