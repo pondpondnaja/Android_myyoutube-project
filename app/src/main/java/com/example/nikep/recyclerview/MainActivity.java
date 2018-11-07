@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         mImageUrl.add("http://www.wallpapermaiden.com/wallpaper/20113/download/2560x1600/darling-in-the-franxx-ichigo-blue-hair-coffee.jpg");
         mName.add("Ichigo");
-        mVideoUrl.add("3x6bspvSZKo");
+        mVideoUrl.add("q6dXsIvOl-M");
 
         initRecycleView();
     }
