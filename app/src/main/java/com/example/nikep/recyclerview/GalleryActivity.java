@@ -29,10 +29,10 @@ public class GalleryActivity extends YouTubeBaseActivity {
         if(getIntent().hasExtra("video_url")&& getIntent().hasExtra("image_name")){
             Log.d(TAG, "getIncomingIntent: found intent extra.");
 
-            String video_url = getIntent().getStringExtra("video_url");
-            String imageName = getIntent().getStringExtra("image_name");
+            String Video_url = getIntent().getStringExtra("Video_url");
+            String ImageName = getIntent().getStringExtra("Image_name");
 
-            setImage(video_url,imageName);
+            setImage(Video_url,ImageName);
         }
     }
 
@@ -44,16 +44,15 @@ public class GalleryActivity extends YouTubeBaseActivity {
         mOnInitializedListener = new YouTubePlayer.OnInitializedListener(){
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b){
-                Log.d(TAG, "onClick: Done OnInitialized");
+                Log.d(TAG, "onClick: Done OnInitialized stage");
                 youTubePlayer.setFullscreen(true);
                 youTubePlayer.loadVideo(videoUrl);
                 youTubePlayer.play();
-
             }
 
             @Override
             public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult){
-                Log.d(TAG, "onClick: Fail OnInitialized");
+                Log.d(TAG, "onClick: Fail to OnInitialized stage");
             }
         };
 
