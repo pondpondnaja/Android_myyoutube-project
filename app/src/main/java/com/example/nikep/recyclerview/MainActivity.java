@@ -28,11 +28,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "initImagebitmap: preparing bitmap.");
 
         mImageUrl.add("https://i.pinimg.com/originals/32/d8/fe/32d8fea5ce212f8c76f894c60a909487.jpg");
-        mName.add("Anime girl 1");
+        mName.add("Animegirl 1");
         mVideoUrl.add("K36sEFvFHXk");
 
         mImageUrl.add("https://i.pinimg.com/originals/d2/9e/87/d29e8717a894e4407e154e5c226292fe.jpg");
-        mName.add("Anime girl 2");
+        mName.add("Animegirl 2");
         mVideoUrl.add("ZSDftSCslAg");
 
         mImageUrl.add("https://2.bp.blogspot.com/-vDjfBpwLMO4/WNfKtumKD2I/AAAAAAAAAoo/RYc4X5CyuckvkMlAh5Gtvh9Y0oe1be1ngCLcB/s1600/Anime%2BGirl%2BSnowfall.jpg");
