@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
         mName.add("Zero two");
         mVideoUrl.add("2oQffkFWK2Y");
 
+        mImageUrl.add("https://img9.uhdpixel.com/wp/z/23/ichigo-and-delphinium-mecha-darling-in-the-franxx-z2354.jpg");
+        mName.add("Ichigo");
+        mVideoUrl.add("3x6bspvSZKo");
+
         initRecycleView();
     }
 
