@@ -7,7 +7,7 @@
     android:id="@+id/parent_layout"
     android:layout_gravity="center"
     android:layout_margin="12dp"
-    app:contentPadding="1dp"
+    app:contentPadding="3dp"
     app:cardElevation="2dp"
     app:cardCornerRadius="8dp">
 
@@ -30,7 +30,8 @@
             android:layout_marginLeft="3dp"
             android:layout_marginTop="210dp"
             android:text="title_here"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="@android:color/black"/>
 
 
 
