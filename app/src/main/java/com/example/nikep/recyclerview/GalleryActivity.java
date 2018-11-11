@@ -44,7 +44,7 @@ public class GalleryActivity extends YouTubeBaseActivity {
         mOnInitializedListener = new YouTubePlayer.OnInitializedListener(){
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b){
-                Log.d(TAG, "onClick: Done OnInitialized stage");
+                Log.d(TAG, "onClick: Done OnInitialized stage" + videoUrl);
                 youTubePlayer.setFullscreen(true);
                 youTubePlayer.loadVideo(videoUrl);
                 youTubePlayer.play();

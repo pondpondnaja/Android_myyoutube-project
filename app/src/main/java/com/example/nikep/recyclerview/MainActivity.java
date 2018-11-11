@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     //Variable
+    private RecyclerView mRecyclerview;
+    private RecyclerViewAdapter mRecyclerviewAdapter;
     private RequestQueue mRequestqueue;
     private ArrayList<String> mName = new ArrayList<>();
     private ArrayList<String> mImageUrl = new ArrayList<>();
@@ -39,67 +42,62 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "initImagebitmap: preparing bitmap.");
 
         mRequestqueue = Volley.newRequestQueue(this);
-
-        mImageUrl.add("https://i.ytimg.com/vi/TE7aXN47-hs/sddefault.jpg");
-        //mName.add("Animegirl 1");
-        //mVideoUrl.add("K36sEFvFHXk");
+        pasteJSON();
+/*
+        mImageUrl.add("https://i.pinimg.com/originals/32/d8/fe/32d8fea5ce212f8c76f894c60a909487.jpg");
+        mName.add("Animegirl 1");
+        mVideoUrl.add("K36sEFvFHXk");
 
         mImageUrl.add("https://i.pinimg.com/originals/d2/9e/87/d29e8717a894e4407e154e5c226292fe.jpg");
-        //mName.add("Animegirl 2");
-        //mVideoUrl.add("ZSDftSCslAg");
+        mName.add("Animegirl 2");
+        mVideoUrl.add("ZSDftSCslAg");
 
         mImageUrl.add("https://2.bp.blogspot.com/-vDjfBpwLMO4/WNfKtumKD2I/AAAAAAAAAoo/RYc4X5CyuckvkMlAh5Gtvh9Y0oe1be1ngCLcB/s1600/Anime%2BGirl%2BSnowfall.jpg");
-        //mName.add("Kuro neko");
-        //mVideoUrl.add("99-Hzo5n2Mk");
+        mName.add("Kuro neko");
+        mVideoUrl.add("99-Hzo5n2Mk");
 
         mImageUrl.add("http://www.wallpapermaiden.com/image/2018/02/02/darling-in-the-franxx-zero-two-long-pink-hair-anime-19728.jpg");
-        //mName.add("Zero two");
-        //mVideoUrl.add("2oQffkFWK2Y");
-
-        pasteJSON();
-
+        mName.add("Zero two");
+        mVideoUrl.add("2oQffkFWK2Y");
+        */
     }
 
     private void pasteJSON(){
         Log.d(TAG, "pasteJSON: Json pasting");
-        final String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10&regionCode=TH&key=AIzaSyD0sb916s-A5P4tHOgoY-sDjaeYYcs2u0g";
-        //String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10&regionCode=JP&key="+YoutubeConfig.getApiKey();
-        JsonObjectRequest request = new JsonObjectRequest(url,null,
-                new Response.Listener<JSONObject>(){
+        final String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=20&regionCode=US&key="+YoutubeConfig.getApiKey();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse: JSON respond");
                         try {
                             JSONArray jsonArray = response.getJSONArray("items"); //root in JSON file
-                            Log.d(TAG, "onResponse: item" + jsonArray);
-                            Log.d(TAG, "onResponse: item length " +jsonArray.length());
 
-                            for(int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject id = jsonArray.getJSONObject(i);
-                                JSONObject snippet = id.getJSONObject("snippet");
-                                String name = snippet.getString("title");
-                                mName.add(name);
-                                Log.d(TAG, "onResponse: name "+mName);
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject item = jsonArray.getJSONObject(i);
+                                String videadd = item.getString("id");            //add Video url
+                                Log.d(TAG, "onResponse: video ID :"+ (i+1)+" "+videadd);
 
+                                JSONObject snippet = item.getJSONObject("snippet");
+                                String nameVideo = snippet.getString("title");
+                                Log.d(TAG, "onResponse: Video name :"+ (i+1)+" "+nameVideo);
 
-                                String videoaddress = id.getString("id");
-                                mVideoUrl.add(videoaddress);
-                                Log.d(TAG, "onResponse: id " + mVideoUrl);
-
-
-/*
                                 JSONObject thumbnails = snippet.getJSONObject("thumbnails");
-
-                                JSONObject resolution = thumbnails.getJSONObject("standard");
+                                JSONObject resolution = thumbnails.getJSONObject("maxres");
                                 String quality = resolution.getString("url");
-                                Log.d(TAG, "onResponse: url " +quality);*/
+                                Log.d(TAG, "onResponse: image url :"+ (i+1)+" "+quality);
+
+                                mVideoUrl.add(videadd);
+                                mName.add(nameVideo);
+                                mImageUrl.add(quality);
+
+                                initRecycleView();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
-
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "onErrorResponse: Error appear");
@@ -108,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mRequestqueue.add(request);
-        initRecycleView();
     }
 
     private void initRecycleView(){
