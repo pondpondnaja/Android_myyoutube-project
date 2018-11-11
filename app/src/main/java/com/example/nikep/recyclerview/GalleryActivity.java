@@ -26,7 +26,7 @@ public class GalleryActivity extends YouTubeBaseActivity {
 
     private void getIncomingIntent(){
         Log.d(TAG, "getIncomingIntent: checking for incoming intent.");
-        if(getIntent().hasExtra("video_url")&& getIntent().hasExtra("image_name")){
+        if(getIntent().hasExtra("Video_url")&& getIntent().hasExtra("Image_name")){
             Log.d(TAG, "getIncomingIntent: found intent extra.");
 
             String Video_url = getIntent().getStringExtra("Video_url");

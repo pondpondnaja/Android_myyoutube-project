@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -22,8 +21,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     //Variable
-    private RecyclerView mRecyclerview;
-    private RecyclerViewAdapter mRecyclerviewAdapter;
     private RequestQueue mRequestqueue;
     private ArrayList<String> mName = new ArrayList<>();
     private ArrayList<String> mImageUrl = new ArrayList<>();
@@ -42,64 +39,60 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "initImagebitmap: preparing bitmap.");
 
         mRequestqueue = Volley.newRequestQueue(this);
-        pasteJSON();
-        /*
-        mImageUrl.add("https://i.pinimg.com/originals/32/d8/fe/32d8fea5ce212f8c76f894c60a909487.jpg");
-        mName.add("Animegirl 1");
-        mVideoUrl.add("K36sEFvFHXk");
+
+        mImageUrl.add("https://i.ytimg.com/vi/TE7aXN47-hs/sddefault.jpg");
+        //mName.add("Animegirl 1");
+        //mVideoUrl.add("K36sEFvFHXk");
 
         mImageUrl.add("https://i.pinimg.com/originals/d2/9e/87/d29e8717a894e4407e154e5c226292fe.jpg");
-        mName.add("Animegirl 2");
-        mVideoUrl.add("ZSDftSCslAg");
+        //mName.add("Animegirl 2");
+        //mVideoUrl.add("ZSDftSCslAg");
 
         mImageUrl.add("https://2.bp.blogspot.com/-vDjfBpwLMO4/WNfKtumKD2I/AAAAAAAAAoo/RYc4X5CyuckvkMlAh5Gtvh9Y0oe1be1ngCLcB/s1600/Anime%2BGirl%2BSnowfall.jpg");
-        mName.add("Kuro neko");
-        mVideoUrl.add("99-Hzo5n2Mk");
+        //mName.add("Kuro neko");
+        //mVideoUrl.add("99-Hzo5n2Mk");
 
         mImageUrl.add("http://www.wallpapermaiden.com/image/2018/02/02/darling-in-the-franxx-zero-two-long-pink-hair-anime-19728.jpg");
-        mName.add("Zero two");
-        mVideoUrl.add("2oQffkFWK2Y");
-        */
-        initRecycleView();
+        //mName.add("Zero two");
+        //mVideoUrl.add("2oQffkFWK2Y");
+
+        pasteJSON();
+
     }
 
     private void pasteJSON(){
         Log.d(TAG, "pasteJSON: Json pasting");
-        String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10&regionCode=JP&key=AIzaSyDIS87lftBJA1lrSp4umI3t3rr6tfiyByY";
+        final String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10&regionCode=TH&key=AIzaSyD0sb916s-A5P4tHOgoY-sDjaeYYcs2u0g";
         //String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10&regionCode=JP&key="+YoutubeConfig.getApiKey();
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(url,null,
+                new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse: JSON respond");
                         try {
                             JSONArray jsonArray = response.getJSONArray("items"); //root in JSON file
+                            Log.d(TAG, "onResponse: item" + jsonArray);
+                            Log.d(TAG, "onResponse: item length " +jsonArray.length());
 
-                            for(int i = 0; i < jsonArray.length(); i++){
-                                JSONObject item = jsonArray.getJSONObject(i);
-                                String videadd = item.getString("id");            //add Video url
-                                mVideoUrl.add(videadd);
+                            for(int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject id = jsonArray.getJSONObject(i);
+                                JSONObject snippet = id.getJSONObject("snippet");
+                                String name = snippet.getString("title");
+                                mName.add(name);
+                                Log.d(TAG, "onResponse: name "+mName);
 
-                                JSONArray jsonROW = item.getJSONArray("snippet"); //find path snippet
 
-                                for(int j = 0; j < jsonROW.length(); j++){
-                                    JSONObject snippet = jsonROW.getJSONObject(j);
-                                    String name = snippet.getString("title");     //add video name
-                                    mName.add(name);
+                                String videoaddress = id.getString("id");
+                                mVideoUrl.add(videoaddress);
+                                Log.d(TAG, "onResponse: id " + mVideoUrl);
 
-                                    JSONArray jsonCOL = snippet.getJSONArray("thumbnails"); //find path thumbnails
 
-                                    for(int k = 0; k < jsonCOL.length(); k++){
-                                        JSONObject thumbnails = jsonCOL.getJSONObject(k);
-                                        JSONArray resolution = thumbnails.getJSONArray("maxres");  //find path maxres
+/*
+                                JSONObject thumbnails = snippet.getJSONObject("thumbnails");
 
-                                        for(int l = 0; l < resolution.length(); l++){
-                                            JSONObject maxres = resolution.getJSONObject(l);
-                                            String JImage = maxres.getString("url");   //add video thumbnails pic.
-                                            mImageUrl.add(JImage);
-                                        }
-                                    }
-                                }
+                                JSONObject resolution = thumbnails.getJSONObject("standard");
+                                String quality = resolution.getString("url");
+                                Log.d(TAG, "onResponse: url " +quality);*/
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -115,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mRequestqueue.add(request);
+        initRecycleView();
     }
 
     private void initRecycleView(){
