@@ -20,14 +20,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private static final String TAG = "RecyclerViewAdapter";
 
     private ArrayList<String> mImagename = new ArrayList<>();
-    private ArrayList<String> mImage = new ArrayList<>();
+    private ArrayList<String> mImageURL = new ArrayList<>();
     private ArrayList<String> mVideo = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter( Context mContext, ArrayList<String> mImagename, ArrayList<String> mImage, ArrayList<String> mVideoUrl){
+    public RecyclerViewAdapter( Context mContext, ArrayList<String> mImagename, ArrayList<String> mImageurl, ArrayList<String> mVideoUrl){
         this.mVideo = mVideoUrl;
         this.mImagename = mImagename;
-        this.mImage = mImage;
+        this.mImageURL = mImageurl;
         this.mContext = mContext;
     }
 
@@ -42,7 +42,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called.");
 
-        Glide.with(mContext).asBitmap().load(mImage.get(position)).into(holder.imageV);
+        Glide.with(mContext).asBitmap().load(mImageURL.get(position)).into(holder.imageV);
         holder.imagename.setText(mImagename.get(position));
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {

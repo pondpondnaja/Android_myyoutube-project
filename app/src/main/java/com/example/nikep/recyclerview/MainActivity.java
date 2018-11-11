@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void pasteJSON(){
         Log.d(TAG, "pasteJSON: Json pasting");
-        final String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=20&regionCode=US&key="+YoutubeConfig.getApiKey();
+        final String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=30&regionCode=US&key="+YoutubeConfig.getApiKey();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                                 String videadd = item.getString("id");            //add Video url
                                 Log.d(TAG, "onResponse: video ID :"+ (i+1)+" "+videadd);
 
-                                JSONObject snippet = item.getJSONObject("snippet");
+                                JSONObject snippet = item.getJSONObject("snippet");    //find snippet Obj.
                                 String nameVideo = snippet.getString("title");
                                 Log.d(TAG, "onResponse: Video name :"+ (i+1)+" "+nameVideo);
 
