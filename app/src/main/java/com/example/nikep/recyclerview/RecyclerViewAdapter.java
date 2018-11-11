@@ -14,20 +14,25 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<String> mImagename = new ArrayList<>();
+    private ArrayList<String> mVideoname = new ArrayList<>();
     private ArrayList<String> mImageURL = new ArrayList<>();
     private ArrayList<String> mVideo = new ArrayList<>();
+    private ArrayList<String> mLikeCount = new ArrayList<>();
+    private ArrayList<String> mViewCount = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter( Context mContext, ArrayList<String> mImagename, ArrayList<String> mImageurl, ArrayList<String> mVideoUrl){
+    public RecyclerViewAdapter( Context mContext, ArrayList<String> mVideoname, ArrayList<String> mImageurl, ArrayList<String> mVideoUrl, ArrayList<String> mLikecount, ArrayList<String> mViewcount){
         this.mVideo = mVideoUrl;
-        this.mImagename = mImagename;
+        this.mVideoname = mVideoname;
         this.mImageURL = mImageurl;
+        this.mLikeCount = mLikecount;
+        this.mViewCount = mViewcount;
         this.mContext = mContext;
     }
 
@@ -43,17 +48,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Log.d(TAG, "onBindViewHolder: called.");
 
         Glide.with(mContext).asBitmap().load(mImageURL.get(position)).into(holder.imageV);
-        holder.imagename.setText(mImagename.get(position));
+        holder.Videoname.setText(mVideoname.get(position));
+
+        int likebefore = Integer.valueOf(mLikeCount.get(position));
+        int likeafter = likebefore/1000;
+        final String likereal = Integer.valueOf(likeafter).toString();
+
+
+        String viewNumber = mViewCount.get(position);
+        final String convertView = new DecimalFormat("#,###.##").format(Double.parseDouble(viewNumber));
+
+        holder.videoLike.setText("Like : "+likeafter+"K");
+        holder.videoView.setText(convertView +" Views");
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                Log.d(TAG, "onClick: clicked on"+mImagename.get(position));
-                Toast.makeText(mContext,mImagename.get(position),Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onClick: clicked on"+mVideoname.get(position));
+                Toast.makeText(mContext,mVideoname.get(position),Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(mContext,GalleryActivity.class);
                 intent.putExtra("Video_url",mVideo.get(position));
-                intent.putExtra("Image_name",mImagename.get(position));
+                intent.putExtra("Video_name",mVideoname.get(position));
+                intent.putExtra("Video_like",likereal);
+                intent.putExtra("Video_view",convertView);
+
                 mContext.startActivity(intent);
             }
         });
@@ -61,18 +80,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return mImagename.size();
+        return mVideoname.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView imageV;
-        TextView imagename;
+        TextView Videoname;
+        TextView videoLike;
+        TextView videoView;
         CardView parentLayout;
 
         public ViewHolder(View itemView){
             super(itemView);
             imageV = itemView.findViewById(R.id.iconview);
-            imagename = itemView.findViewById(R.id.txtTittle);
+            Videoname = itemView.findViewById(R.id.txtTittle);
+            videoLike = itemView.findViewById(R.id.videolike);
+            videoView = itemView.findViewById(R.id.viewcount);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }

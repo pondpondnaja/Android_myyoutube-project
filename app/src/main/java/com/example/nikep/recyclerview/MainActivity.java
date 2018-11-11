@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mName = new ArrayList<>();
     private ArrayList<String> mImageUrl = new ArrayList<>();
     private ArrayList<String> mVideoUrl = new ArrayList<>();
+    private ArrayList<String> mVideoLike = new ArrayList<>();
+    private ArrayList<String> mViewCount = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,31 +42,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void initImagebitmap(){
         Log.d(TAG, "initImagebitmap: preparing bitmap.");
-
         mRequestqueue = Volley.newRequestQueue(this);
         pasteJSON();
-/*
-        mImageUrl.add("https://i.pinimg.com/originals/32/d8/fe/32d8fea5ce212f8c76f894c60a909487.jpg");
-        mName.add("Animegirl 1");
-        mVideoUrl.add("K36sEFvFHXk");
-
-        mImageUrl.add("https://i.pinimg.com/originals/d2/9e/87/d29e8717a894e4407e154e5c226292fe.jpg");
-        mName.add("Animegirl 2");
-        mVideoUrl.add("ZSDftSCslAg");
-
-        mImageUrl.add("https://2.bp.blogspot.com/-vDjfBpwLMO4/WNfKtumKD2I/AAAAAAAAAoo/RYc4X5CyuckvkMlAh5Gtvh9Y0oe1be1ngCLcB/s1600/Anime%2BGirl%2BSnowfall.jpg");
-        mName.add("Kuro neko");
-        mVideoUrl.add("99-Hzo5n2Mk");
-
-        mImageUrl.add("http://www.wallpapermaiden.com/image/2018/02/02/darling-in-the-franxx-zero-two-long-pink-hair-anime-19728.jpg");
-        mName.add("Zero two");
-        mVideoUrl.add("2oQffkFWK2Y");
-        */
     }
 
     private void pasteJSON(){
         Log.d(TAG, "pasteJSON: Json pasting");
-        final String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=30&regionCode=US&key="+YoutubeConfig.getApiKey();
+        final String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=20&regionCode=US&key="+YoutubeConfig.getApiKey();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -79,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d(TAG, "onResponse: video ID :"+ (i+1)+" "+videadd);
 
                                 JSONObject snippet = item.getJSONObject("snippet");    //find snippet Obj.
-                                String nameVideo = snippet.getString("title");
+                                String nameVideo = snippet.getString("title");    //get string "title" from snippet Obj.
                                 Log.d(TAG, "onResponse: Video name :"+ (i+1)+" "+nameVideo);
 
                                 JSONObject thumbnails = snippet.getJSONObject("thumbnails");
@@ -87,9 +71,17 @@ public class MainActivity extends AppCompatActivity {
                                 String quality = resolution.getString("url");
                                 Log.d(TAG, "onResponse: image url :"+ (i+1)+" "+quality);
 
+                                JSONObject statistics = item.getJSONObject("statistics");
+                                String likecount = statistics.getString("likeCount");
+                                String viewcount = statistics.getString("viewCount");
+                                Log.d(TAG, "onResponse: likecount :"+(i+1)+" "+likecount);
+                                Log.d(TAG, "onResponse: viewcount :"+(i+1)+" "+viewcount);
+
                                 mVideoUrl.add(videadd);
                                 mName.add(nameVideo);
                                 mImageUrl.add(quality);
+                                mVideoLike.add(likecount);
+                                mViewCount.add(viewcount);
 
                                 initRecycleView();
                             }
@@ -111,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     private void initRecycleView(){
         Log.d(TAG, "initRecycleView: initRecycleview.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,mName,mImageUrl,mVideoUrl);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,mName,mImageUrl,mVideoUrl,mVideoLike,mViewCount);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

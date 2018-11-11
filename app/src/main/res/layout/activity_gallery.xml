@@ -14,13 +14,42 @@
 
     </com.google.android.youtube.player.YouTubePlayerView>
 
-    <Button
-        android:id="@+id/btnplay"
+    <TextView
+        android:id="@+id/videoname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/youtubeplayer"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
-        android:text="play" />
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:text="Title"/>
+
+    <TextView
+        android:id="@+id/vlike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Like"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:layout_below="@+id/videoname"/>
+
+    <TextView
+        android:id="@+id/vView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/videoname"
+        android:layout_marginLeft="100dp"
+        android:layout_toRightOf="@+id/videolike"
+        android:text="View"
+        android:textSize="18dp"
+        android:textColor="@android:color/black"/>
+
+    <ImageButton
+        android:id="@+id/btnplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vlike"
+        android:layout_centerHorizontal="true"
+        android:src="@android:drawable/ic_media_play" />
 
 </RelativeLayout>
