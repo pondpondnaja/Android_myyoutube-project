@@ -27,6 +27,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> mViewCount = new ArrayList<>();
     private Context mContext;
 
+    //POJO
     public RecyclerViewAdapter( Context mContext, ArrayList<String> mVideoname, ArrayList<String> mImageurl, ArrayList<String> mVideoUrl, ArrayList<String> mLikecount, ArrayList<String> mViewcount){
         this.mVideo = mVideoUrl;
         this.mVideoname = mVideoname;
@@ -53,7 +54,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         int likebefore = Integer.valueOf(mLikeCount.get(position));
         int likeafter = likebefore/1000;
         final String likereal = Integer.valueOf(likeafter).toString();
-
 
         String viewNumber = mViewCount.get(position);
         final String convertView = new DecimalFormat("#,###.##").format(Double.parseDouble(viewNumber));
