@@ -28,7 +28,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
 
     //POJO
-    public RecyclerViewAdapter( Context mContext, ArrayList<String> mVideoname, ArrayList<String> mImageurl, ArrayList<String> mVideoUrl, ArrayList<String> mLikecount, ArrayList<String> mViewcount){
+    public RecyclerViewAdapter(Context mContext, ArrayList<String> mVideoname, ArrayList<String> mImageurl, ArrayList<String> mVideoUrl, ArrayList<String> mLikecount, ArrayList<String> mViewcount){
         this.mVideo = mVideoUrl;
         this.mVideoname = mVideoname;
         this.mImageURL = mImageurl;
@@ -48,7 +48,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called.");
 
-        Glide.with(mContext).asBitmap().load(mImageURL.get(position)).into(holder.imageV);
+        Glide.with(mContext).load(mImageURL.get(position)).into(holder.imageV);
+
         holder.Videoname.setText(mVideoname.get(position));
 
         int likebefore = Integer.valueOf(mLikeCount.get(position));

@@ -1,10 +1,15 @@
 package com.example.nikep.recyclerview;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,8 +27,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     //Variable
-    private RecyclerView mRecyclerview;
-    private RecyclerViewAdapter mRecyclerviewAdapter;
     private RequestQueue mRequestqueue;
     private ArrayList<String> mName = new ArrayList<>();
     private ArrayList<String> mImageUrl = new ArrayList<>();
@@ -36,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: started.");
-
-        initImagebitmap();
+        isOnline();
+        checkConnect();
     }
 
     private void initImagebitmap(){
@@ -48,15 +51,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void pasteJSON(){
         Log.d(TAG, "pasteJSON: Json pasting");
-        final String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=20&regionCode=US&key="+YoutubeConfig.getApiKey();
+        final String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=15&regionCode=US&key="+YoutubeConfig.getApiKey();
+        //final String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=20&regionCode=US&key=AIzaSyD0sb916s-A5P4tHOgoY-sDjaeYYcs2u0g";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+                new Response.Listener<JSONObject>(){
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONObject response){
                         Log.d(TAG, "onResponse: JSON respond");
-                        try {
+                        try{
                             JSONArray jsonArray = response.getJSONArray("items"); //root in JSON file
-
                             for(int i = 0; i < jsonArray.length(); i++){
                                 JSONObject item = jsonArray.getJSONObject(i);
                                 String videadd = item.getString("id");            //add Video url
@@ -85,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
 
                                 initRecycleView();
                             }
-                        } catch (JSONException e) {
+                        }catch(JSONException e){
                             e.printStackTrace();
                         }
                     }
-                }, new Response.ErrorListener() {
+                },new Response.ErrorListener(){
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "onErrorResponse: Error appear");
@@ -106,5 +109,24 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    protected boolean isOnline(){
+        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkifo = cm.getActiveNetworkInfo();
+        if (networkifo != null && networkifo.isConnectedOrConnecting()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void checkConnect(){
+        if (isOnline()){
+            Toast.makeText(this,"You are connected",Toast.LENGTH_SHORT).show();
+            initImagebitmap();
+        }else{
+            Toast.makeText(this,"You aren't connected",Toast.LENGTH_SHORT).show();
+        }
     }
 }
